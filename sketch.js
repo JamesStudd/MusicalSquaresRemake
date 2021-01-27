@@ -1,8 +1,10 @@
-let polySynth;
 let allNotes = [];
 let playLine;
 let scaleSelection = 0;
 let gridSize = 16;
+let noteSize = 40;
+let noteDeselectedColor = [62, 141, 152];
+let noteSelectedColor = [255, 255, 255];
 
 const scales = [
 	{
@@ -17,56 +19,45 @@ const scales = [
 
 let activatingNotes = false;
 
-let durationSlider, delaySlider, velocitySlider, speedSlider;
-let durationDiv, delayDiv, velocityDiv, speedDiv;
 let scaleDropdown;
 let displayNotesCheckbox;
 
-let adsrSettings;
+let oscillatorDropdown;
 
-const tSynth = new Tone.PolySynth({
-	// "volume": -10,
+const synth = new Tone.PolySynth({
 	envelope: {
-		attack: 0.5,
-		decay: 0,
-		sustain: 0.3,
-		release: 0,
+		attack: 0.05,
+		decay: 0.1,
+		sustain: 0.5,
+		release: 0.2,
 	},
 }).toMaster();
 
-tSynth.set({
+synth.set({
 	oscillator: {
 		type: "sine",
 	},
 });
 
 function setup() {
-	Tone.Transport.start();
-	createCanvas(32 * gridSize, 32 * gridSize);
-	polySynth = new p5.PolySynth();
-	adsrSettings = new ADSRSettings([0.05, 0.3, 0.8, 0.4]);
+	let cnv = createCanvas(noteSize * gridSize, noteSize * gridSize);
+	cnv.parent("sketch-holder");
 
-	playLine = new Line(4);
+	Tone.Transport.start();
+
+	playLine = new Line(3.5);
 
 	setupGrid(true);
-
-	durationSlider = new CustomSlider(10, 100, 1, 0, 100);
-	delaySlider = new CustomSlider(0, 100, 1, 0, 100);
-	velocitySlider = new CustomSlider(0, 100, 30, 1, 100);
-	speedSlider = new CustomSlider(3, 20, 4, 1, 1);
-
-	durationDiv = createDiv();
-	delayDiv = createDiv();
-	velocityDiv = createDiv();
-	speedDiv = createDiv();
 
 	scaleDropdown = createSelect();
 	for (const scale of scales) {
 		scaleDropdown.option(scale.name);
 	}
 	scaleDropdown.changed(newScaleSelected);
+	scaleDropdown.parent("settings");
 
 	displayNotesCheckbox = createCheckbox("Show Notes", true);
+	displayNotesCheckbox.parent("settings");
 
 	frameRate(30);
 
@@ -75,7 +66,6 @@ function setup() {
 
 function draw() {
 	background(255);
-	playLine.speed = speedSlider.getValue();
 	playLine.update(deltaTime);
 
 	if (playLine.x > width) {
@@ -88,17 +78,12 @@ function draw() {
 	allNotes.forEach((note) => {
 		note.draw();
 		if (note.active && note.canPlay && note.isLineOver(playLine.x)) {
-			tSynth.triggerAttackRelease(note.note, durationSlider.getValue());
+			synth.triggerAttackRelease(note.note, "8n");
 			note.canPlay = false;
 		}
 	});
 
 	playLine.draw();
-
-	durationDiv.html(`Duration: ${durationSlider.getValue()}`);
-	delayDiv.html(`Delay: ${delaySlider.getValue()}`);
-	velocityDiv.html(`Velocity: ${velocitySlider.getValue()}`);
-	speedDiv.html(`Speed: ${speedSlider.getValue()}`);
 }
 
 function newScaleSelected() {
@@ -115,8 +100,8 @@ function newScaleSelected() {
 function setupGrid(initial = false) {
 	let octaveIncrease = 0;
 
-	for (let col = 0; col < 16; col++) {
-		for (let row = 0; row < 16; row++) {
+	for (let col = 0; col < gridSize; col++) {
+		for (let row = 0; row < gridSize; row++) {
 			let note = scales[scaleSelection].notes[row % 5];
 			if (row % 5 == 0) {
 				octaveIncrease = row / 5;
@@ -127,9 +112,15 @@ function setupGrid(initial = false) {
 			}`;
 
 			if (initial) {
-				allNotes.push(new Note(col * 32, height - 32 - row * 32, note));
+				allNotes.push(
+					new Note(
+						col * noteSize,
+						height - noteSize - row * noteSize,
+						note
+					)
+				);
 			} else {
-				let n = allNotes[row * 16 + col];
+				let n = allNotes[col * gridSize + row];
 				n.note = note;
 			}
 		}
@@ -137,6 +128,7 @@ function setupGrid(initial = false) {
 }
 
 function mousePressed() {
+	if (mouseX === 0 && mouseY === 0) return;
 	let note = getSingleNoteFromMousePos();
 	if (note) {
 		note.active = !note.active;

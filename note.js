@@ -4,7 +4,7 @@ class Note {
 		this.y = y;
 		this.note = note;
 
-		this.size = 32;
+		this.size = noteSize;
 		this.active = false;
 		this.canPlay = true;
 	}
@@ -12,7 +12,7 @@ class Note {
 	draw() {
 		textSize(12);
 
-		let col = this.active ? [0, 255, 0] : [255, 0, 0];
+		let col = this.active ? noteSelectedColor : noteDeselectedColor;
 
 		fill(col);
 		square(this.x, this.y, this.size);
