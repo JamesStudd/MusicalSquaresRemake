@@ -15,6 +15,10 @@ const scales = [
 		name: "F Pentatonic",
 		notes: ["F2", "G2", "A2", "C3", "D3"],
 	},
+	{
+		name: "C Penatonic",
+		notes: ["C3", "D3", "E3", "F3", "G3"],
+	},
 ];
 
 let activatingNotes = false;
@@ -24,6 +28,10 @@ let displayNotesCheckbox;
 
 let oscillatorDropdown;
 
+const rev = new Tone.Reverb({
+	decay: 4,
+}).toDestination();
+
 const synth = new Tone.PolySynth({
 	envelope: {
 		attack: 0.05,
@@ -31,13 +39,17 @@ const synth = new Tone.PolySynth({
 		sustain: 0.5,
 		release: 0.2,
 	},
-}).toMaster();
+})
+	.connect(rev)
+	.toDestination();
 
 synth.set({
 	oscillator: {
 		type: "sine",
 	},
 });
+
+console.log(synth);
 
 function setup() {
 	let cnv = createCanvas(noteSize * gridSize, noteSize * gridSize);
@@ -59,13 +71,13 @@ function setup() {
 	displayNotesCheckbox = createCheckbox("Show Notes", true);
 	displayNotesCheckbox.parent("settings");
 
-	frameRate(30);
+	frameRate(60);
 
 	textAlign(CENTER, CENTER);
 }
 
 function draw() {
-	background(255);
+	background(18, 41, 44);
 	playLine.update(deltaTime);
 
 	if (playLine.x > width) {
@@ -114,8 +126,8 @@ function setupGrid(initial = false) {
 			if (initial) {
 				allNotes.push(
 					new Note(
-						col * noteSize,
-						height - noteSize - row * noteSize,
+						4 + col * noteSize,
+						4 + height - noteSize - row * noteSize,
 						note
 					)
 				);

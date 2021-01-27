@@ -10,7 +10,7 @@ class Line {
 
 	draw() {
 		fill(255);
-		strokeWeight(2);
+		strokeWeight(4);
 		line(this.x, 0, this.x, height);
 	}
 }

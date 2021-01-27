@@ -4,7 +4,7 @@ class Note {
 		this.y = y;
 		this.note = note;
 
-		this.size = noteSize;
+		this.size = 32;
 		this.active = false;
 		this.canPlay = true;
 	}

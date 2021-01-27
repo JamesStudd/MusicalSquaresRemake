@@ -8,7 +8,6 @@ html, body {
 
 canvas {
     padding: 0;
-    box-shadow: 0px 0px 5px 10px #0f2022 ;
 }
 
 #sketch-holder {
