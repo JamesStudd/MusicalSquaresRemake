@@ -1,4 +1,8 @@
-import { noteSelectedColor, noteDeselectedColor } from "./../setup/colors.js";
+import {
+	noteSelectedColor,
+	noteDeselectedColor,
+	noteBorderColor,
+} from "./../setup/colors.js";
 
 export default class Note {
 	constructor(x, y, note) {
@@ -17,6 +21,8 @@ export default class Note {
 
 		let col = this.active ? noteSelectedColor : noteDeselectedColor;
 
+		strokeWeight(1);
+		stroke(noteBorderColor);
 		fill(col);
 		square(this.x, this.y, this.size);
 

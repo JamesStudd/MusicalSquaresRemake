@@ -11,6 +11,7 @@ export default class Line {
 	draw() {
 		fill(255);
 		strokeWeight(4);
+		stroke(0);
 		line(this.x, 0, this.x, height);
 	}
 }
