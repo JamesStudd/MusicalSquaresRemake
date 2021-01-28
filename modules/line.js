@@ -1,4 +1,4 @@
-class Line {
+export default class Line {
 	constructor(speed) {
 		this.x = 0;
 		this.speed = speed;

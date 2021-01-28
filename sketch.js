@@ -1,3 +1,6 @@
+import Line from "./modules/line.js";
+import Note from "./modules/note.js";
+
 let allNotes = [];
 let playLine;
 let scaleSelection = 0;
@@ -51,7 +54,7 @@ synth.set({
 
 console.log(synth);
 
-function setup() {
+window.setup = function () {
 	let cnv = createCanvas(noteSize * gridSize, noteSize * gridSize);
 	cnv.parent("sketch-holder");
 
@@ -74,9 +77,9 @@ function setup() {
 	frameRate(60);
 
 	textAlign(CENTER, CENTER);
-}
+};
 
-function draw() {
+window.draw = function () {
 	background(18, 41, 44);
 	playLine.update(deltaTime);
 
@@ -96,7 +99,7 @@ function draw() {
 	});
 
 	playLine.draw();
-}
+};
 
 function newScaleSelected() {
 	scaleDropdown.value();
@@ -128,7 +131,9 @@ function setupGrid(initial = false) {
 					new Note(
 						4 + col * noteSize,
 						4 + height - noteSize - row * noteSize,
-						note
+						note,
+						noteSelectedColor,
+						noteDeselectedColor
 					)
 				);
 			} else {
@@ -139,25 +144,25 @@ function setupGrid(initial = false) {
 	}
 }
 
-function mousePressed() {
+window.mousePressed = function () {
 	if (mouseX === 0 && mouseY === 0) return;
 	let note = getSingleNoteFromMousePos();
 	if (note) {
 		note.active = !note.active;
 		activatingNotes = note.active;
 	}
-}
+};
 
-function mouseReleased() {
+window.mouseReleased = function () {
 	activatingNotes = !activatingNotes;
-}
+};
 
-function mouseDragged() {
+window.mouseDragged = function () {
 	let note = getSingleNoteFromMousePos();
 	if (note) {
 		note.active = activatingNotes;
 	}
-}
+};
 
 function getSingleNoteFromMousePos() {
 	for (let note of allNotes) {
@@ -168,11 +173,11 @@ function getSingleNoteFromMousePos() {
 	return undefined;
 }
 
-function keyPressed() {
+window.keyPressed = function () {
 	// Spacebar
 	if (keyCode === 32) {
 		allNotes.forEach((note) => {
 			note.active = false;
 		});
 	}
-}
+};

@@ -1,5 +1,5 @@
-class Note {
-	constructor(x, y, note) {
+export default class Note {
+	constructor(x, y, note, selectedCol, deselectedCol) {
 		this.x = x;
 		this.y = y;
 		this.note = note;
@@ -7,21 +7,24 @@ class Note {
 		this.size = 32;
 		this.active = false;
 		this.canPlay = true;
+
+		this.selectedCol = selectedCol;
+		this.deselectedCol = deselectedCol;
 	}
 
 	draw() {
 		textSize(12);
 
-		let col = this.active ? noteSelectedColor : noteDeselectedColor;
+		let col = this.active ? this.selectedCol : this.deselectedCol;
 
-		fill(col);
+		fill(col[0], col[1], col[2]);
 		square(this.x, this.y, this.size);
 
-		if (displayNotesCheckbox.checked()) {
-			col = [0, 0, 0];
-			fill(col);
-			text(this.note, this.x + this.size / 2, this.y + this.size / 2);
-		}
+		// if (displayNotesCheckbox.checked()) {
+		// 	col = [0, 0, 0];
+		// 	fill(col);
+		// 	text(this.note, this.x + this.size / 2, this.y + this.size / 2);
+		// }
 	}
 
 	activate() {
