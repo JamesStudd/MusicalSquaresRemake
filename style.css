@@ -29,4 +29,15 @@ canvas {
 
 #settings h1,label,p {
     color: white;
+    padding-bottom: 0px;
+}
+
+#sliders {
+    width: 50%;
+    margin: auto;
+    padding-bottom: 10px;
+}
+
+.sliderLabel {
+    color: white;
 }

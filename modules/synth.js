@@ -12,7 +12,7 @@ export default class Synth {
 				release: r,
 			},
 			maxPolyphony: 64,
-			volume: -20,
+			volume: -30,
 		})
 			.connect(rev)
 			.toDestination();
@@ -22,9 +22,19 @@ export default class Synth {
 				type: "sine",
 			},
 		});
+
+		this.minVolume = -60;
+		this.maxVolume = -10;
+		this.mute = -100;
 	}
 
 	play(note) {
 		this.synth.triggerAttackRelease(note.note, "8n");
+	}
+
+	setVolumeFromMap(volume, min, max) {
+		let newVolume = map(volume, min, max, this.minVolume, this.maxVolume);
+		if (newVolume === this.minVolume) newVolume = this.mute;
+		this.synth.volume.value = newVolume;
 	}
 }

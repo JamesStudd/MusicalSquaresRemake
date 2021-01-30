@@ -1,6 +1,7 @@
 import Line from "./modules/line.js";
 import Note from "./modules/note.js";
 import Synth from "./modules/synth.js";
+import SynthSettings from "./modules/settings.js";
 import { scales } from "./setup/scales.js";
 
 const GRID_SIZE = 16;
@@ -48,6 +49,8 @@ window.setup = function () {
 	// Grid setup
 	setupGrid(true);
 	playLine = new Line(3.5);
+
+	new SynthSettings(synth, "Volume");
 };
 
 window.draw = function () {
