@@ -1,8 +1,11 @@
 export default class Synth {
-	constructor(a, d, s, r, reverbDecay) {
-		const rev = new Tone.Reverb({
-			decay: reverbDecay,
-		}).toDestination();
+	constructor(a, d, s, r, reverbDecay, maxVoices, startVolume) {
+		const rev =
+			reverbDecay === -1
+				? undefined
+				: new Tone.Reverb({
+						decay: reverbDecay,
+				  }).toDestination();
 
 		this.synth = new Tone.PolySynth({
 			envelope: {
@@ -11,10 +14,13 @@ export default class Synth {
 				sustain: s,
 				release: r,
 			},
-			volume: -30,
-		})
-			.connect(rev)
-			.toDestination();
+			volume: startVolume,
+			maxPolyphony: maxVoices,
+		}).toDestination();
+
+		if (rev) {
+			this.synth.connect(rev);
+		}
 
 		this.synth.set({
 			oscillator: {
@@ -27,8 +33,8 @@ export default class Synth {
 		this.mute = -100;
 	}
 
-	play(note) {
-		this.synth.triggerAttackRelease(note.note, "8n");
+	play(note, duration, delay) {
+		this.synth.triggerAttackRelease(note.note, duration, delay);
 	}
 
 	setVolumeFromMap(volume, min, max) {

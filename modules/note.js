@@ -3,12 +3,12 @@ const NOTE_SELECTED_COLOR = [255, 255, 255];
 const NOTE_BORDER_COLOR = [49, 111, 119];
 
 export default class Note {
-	constructor(x, y, note) {
+	constructor(x, y, note, size) {
 		this.x = x;
 		this.y = y;
 		this.note = note;
 
-		this.size = 32;
+		this.size = size;
 		this.active = false;
 		this.canPlay = true;
 		this.displayNotes = false;
