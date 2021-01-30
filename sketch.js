@@ -3,7 +3,8 @@ import Note from "./modules/note.js";
 import Synth from "./modules/synth.js";
 import SynthSettings from "./modules/settings.js";
 import { scales } from "./setup/scales.js";
-import { Particle, ParticleSystem } from "./modules/particle.js";
+import { ParticleSystem } from "./modules/particle.js";
+import Checkbox from "./modules/checkbox.js";
 
 const SIZE_SETTINGS = {
 	PC: {
@@ -41,6 +42,8 @@ const synth = new Synth(
 );
 
 let particleSystem;
+let displayLine = true,
+	displayParticles = true;
 
 window.setup = function () {
 	let cnv = createCanvas(NOTE_SIZE * GRID_SIZE, NOTE_SIZE * GRID_SIZE);
@@ -74,11 +77,16 @@ window.setup = function () {
 	scaleDropdown.parent("settings");
 	scaleDropdown.class("settingOption");
 
-	let displayNotesCheckbox = createCheckbox("Show Notes", false);
-	displayNotesCheckbox.parent("settings");
-	displayNotesCheckbox.class("settingOption");
-	displayNotesCheckbox.changed(() =>
+	new Checkbox("Show Notes", false).box.changed(() =>
 		allNotes.forEach((note) => note.toggleDisplayNotes())
+	);
+
+	new Checkbox("Show Particles", true).box.changed(
+		() => (displayParticles = !displayParticles)
+	);
+
+	new Checkbox("Show Line", true).box.changed(
+		() => (displayLine = !displayLine)
 	);
 
 	// Grid setup
@@ -111,13 +119,17 @@ window.draw = function () {
 				USING_MOBILE ? "+0.05" : undefined
 			);
 			note.canPlay = false;
-			particleSystem.addParticle(note.x, note.y);
+			if (displayParticles) {
+				particleSystem.addParticle(
+					note.x + note.size / 2,
+					note.y + note.size / 2
+				);
+			}
 		}
 	});
 
-	playLine.draw();
-
-	particleSystem.run();
+	if (displayLine) playLine.draw();
+	if (displayParticles) particleSystem.run();
 };
 
 window.mousePressed = function () {

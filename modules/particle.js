@@ -1,4 +1,7 @@
+const PARTICLE_COLOR = [170, 232, 240];
+
 // A simple Particle class
+// https://p5js.org/examples/simulate-particle-system.html
 export class Particle {
 	constructor(position) {
 		this.acceleration = createVector(0, 0.05);
@@ -13,17 +16,18 @@ export class Particle {
 	}
 
 	update() {
-		this.velocity.add(this.acceleration);
-		this.position.add(this.velocity);
+		//this.velocity.add(this.acceleration);
+		//this.position.add(this.velocity);
 		this.lifespan -= 2;
 	}
 
 	// Method to display
 	display() {
-		stroke(200, this.lifespan);
+		stroke(170, 232, 240, this.lifespan);
 		strokeWeight(2);
-		fill(127, this.lifespan);
-		ellipse(this.position.x, this.position.y, 12, 12);
+		fill(170, 232, 240, this.lifespan);
+		let size = map(this.lifespan, 255, 0, 10, 100);
+		ellipse(this.position.x, this.position.y, size, size);
 	}
 
 	// Is the particle still useful?
