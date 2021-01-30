@@ -3,6 +3,7 @@ import Note from "./modules/note.js";
 import Synth from "./modules/synth.js";
 import SynthSettings from "./modules/settings.js";
 import { scales } from "./setup/scales.js";
+import { Particle, ParticleSystem } from "./modules/particle.js";
 
 const SIZE_SETTINGS = {
 	PC: {
@@ -38,6 +39,8 @@ const synth = new Synth(
 	USING_MOBILE ? 10 : 64,
 	USING_MOBILE ? -10 : -30
 );
+
+let particleSystem;
 
 window.setup = function () {
 	let cnv = createCanvas(NOTE_SIZE * GRID_SIZE, NOTE_SIZE * GRID_SIZE);
@@ -83,6 +86,9 @@ window.setup = function () {
 	playLine = new Line(USING_MOBILE ? 11 : 3.5);
 
 	if (!USING_MOBILE) new SynthSettings(synth);
+
+	// Particles
+	particleSystem = new ParticleSystem(createVector(width / 2, 50));
 };
 
 window.draw = function () {
@@ -105,10 +111,13 @@ window.draw = function () {
 				USING_MOBILE ? "+0.05" : undefined
 			);
 			note.canPlay = false;
+			particleSystem.addParticle(note.x, note.y);
 		}
 	});
 
 	playLine.draw();
+
+	particleSystem.run();
 };
 
 window.mousePressed = function () {
