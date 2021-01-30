@@ -2,11 +2,11 @@ import Line from "./modules/line.js";
 import Note from "./modules/note.js";
 import Synth from "./modules/synth.js";
 import { scales } from "./setup/scales.js";
-import { backgroundColor } from "./setup/colors.js";
 
 const GRID_SIZE = 16;
 const NOTE_SIZE = 40;
 const OFFSET = 4;
+const BACKGROUND_COLOR = [18, 41, 44];
 
 let allNotes = [];
 let playLine;
@@ -26,14 +26,15 @@ window.setup = function () {
 	// Sound setup
 	Tone.Transport.start();
 
-	// Grid setup
-	setupGrid(true);
-	playLine = new Line(3.5);
-
 	// UI elements
 	let scaleDropdown = createSelect();
-	for (const scale of scales) {
+	for (let i = 0; i < scales.length; i++) {
+		const scale = scales[i];
 		scaleDropdown.option(scale.name);
+		if (scale.default) {
+			scaleDropdown.selected(scale.name);
+			scaleSelection = i;
+		}
 	}
 	scaleDropdown.changed(() => newScaleSelected(scaleDropdown.value()));
 	scaleDropdown.parent("settings");
@@ -43,10 +44,14 @@ window.setup = function () {
 	displayNotesCheckbox.changed(() =>
 		allNotes.forEach((note) => note.toggleDisplayNotes())
 	);
+
+	// Grid setup
+	setupGrid(true);
+	playLine = new Line(3.5);
 };
 
 window.draw = function () {
-	background(backgroundColor);
+	background(BACKGROUND_COLOR);
 	playLine.update(deltaTime);
 
 	if (playLine.x > width) {

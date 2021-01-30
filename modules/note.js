@@ -1,8 +1,6 @@
-import {
-	noteSelectedColor,
-	noteDeselectedColor,
-	noteBorderColor,
-} from "./../setup/colors.js";
+const NOTE_DESELECTED_COLOR = [62, 141, 152];
+const NOTE_SELECTED_COLOR = [255, 255, 255];
+const NOTE_BORDER_COLOR = [49, 111, 119];
 
 export default class Note {
 	constructor(x, y, note) {
@@ -19,10 +17,10 @@ export default class Note {
 	draw() {
 		textSize(12);
 
-		let col = this.active ? noteSelectedColor : noteDeselectedColor;
+		let col = this.active ? NOTE_SELECTED_COLOR : NOTE_DESELECTED_COLOR;
 
 		strokeWeight(1);
-		stroke(noteBorderColor);
+		stroke(NOTE_BORDER_COLOR);
 		fill(col);
 		square(this.x, this.y, this.size);
 

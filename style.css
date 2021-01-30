@@ -27,6 +27,6 @@ canvas {
     background-color: #285b62;
 }
 
-#settings h1,label {
+#settings h1,label,p {
     color: white;
 }
