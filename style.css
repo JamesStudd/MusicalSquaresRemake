@@ -19,7 +19,7 @@ canvas {
 }
 
 #settings {
-    width: 50%;
+    width: 30%;
     margin: auto;
     padding: 10px;
     text-align: center;
@@ -33,11 +33,19 @@ canvas {
 }
 
 #sliders {
-    width: 50%;
+    width: 30%;
     margin: auto;
     padding-bottom: 10px;
 }
 
 .sliderLabel {
     color: white;
+}
+
+.settingOption {
+    margin-bottom: 10px;
+}
+
+hr {
+    width: 50%;
 }

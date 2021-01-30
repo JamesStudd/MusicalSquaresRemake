@@ -11,7 +11,6 @@ export default class Synth {
 				sustain: s,
 				release: r,
 			},
-			maxPolyphony: 64,
 			volume: -30,
 		})
 			.connect(rev)

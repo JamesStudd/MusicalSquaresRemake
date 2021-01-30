@@ -39,9 +39,11 @@ window.setup = function () {
 	}
 	scaleDropdown.changed(() => newScaleSelected(scaleDropdown.value()));
 	scaleDropdown.parent("settings");
+	scaleDropdown.class("settingOption");
 
 	let displayNotesCheckbox = createCheckbox("Show Notes", false);
 	displayNotesCheckbox.parent("settings");
+	displayNotesCheckbox.class("settingOption");
 	displayNotesCheckbox.changed(() =>
 		allNotes.forEach((note) => note.toggleDisplayNotes())
 	);
