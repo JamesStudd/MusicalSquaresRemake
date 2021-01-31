@@ -9,12 +9,19 @@ canvas {
     padding: 0;
 }
 
+#content {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
 #sketch-holder {
     margin: auto;
     width: 100%;
     text-align: center;
-    height: auto;
-    padding-top: 15%;
 }
 
 #settings {

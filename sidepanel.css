@@ -1,6 +1,6 @@
  /* The sidepanel menu */
  #sideMaster {
-    height: 450px; /* Specify a height */
+    height: 500px; /* Specify a height */
     width: 350px; /* 0 width - change this with JavaScript */
     position: absolute; /* Stay in place */
     z-index: 1; /* Stay on top */
@@ -11,6 +11,8 @@
     padding-top: 60px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidepanel */
     text-align: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.2em;
   }
 
 /* The sidepanel menu */
@@ -19,7 +21,7 @@
     width: 300px
   }
 
-  #sideMaster button {
+  .openbtn {
     margin: 0;
     position: absolute;
     top: 50%;
@@ -28,6 +30,12 @@
     transform: translateY(-50%);
     width: 50px;
   }
+
+  @media only screen and (max-width: 1000px) {
+    .openbtn {
+        top: 30%;
+    }
+}
   
   /* The sidepanel links */
   .sidepanel a {

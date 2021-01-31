@@ -61,11 +61,6 @@ window.setup = function () {
 	Tone.Transport.start("+0.1");
 
 	// UI elements
-	let button = createButton("Clear");
-	button.parent("mySidepanel");
-	button.class("mobileOnly");
-	button.mousePressed(clearNotes);
-
 	let scaleDropdown = createSelect();
 	for (let i = 0; i < scales.length; i++) {
 		const scale = scales[i];
@@ -90,6 +85,11 @@ window.setup = function () {
 	new Checkbox("Show Line", false).box.changed(
 		() => (displayLine = !displayLine)
 	);
+
+	let button = createButton("Clear");
+	button.parent("mySidepanel");
+	button.class("mobileOnly");
+	button.mousePressed(clearNotes);
 
 	if (!USING_MOBILE) new SynthSettings(synth);
 
@@ -138,7 +138,7 @@ window.draw = function () {
 };
 
 window.mousePressed = function () {
-	if (mouseX === 0 && mouseY === 0) return;
+	if ((mouseX === 0 && mouseY === 0) || (USING_MOBILE && !isClosed)) return;
 	let note = getSingleNoteFromMousePos();
 	if (note) {
 		note.active = !note.active;
@@ -151,6 +151,7 @@ window.mouseReleased = function () {
 };
 
 window.mouseDragged = function () {
+	if ((mouseX === 0 && mouseY === 0) || (USING_MOBILE && !isClosed)) return;
 	let note = getSingleNoteFromMousePos();
 	if (note) {
 		note.active = activatingNotes;
