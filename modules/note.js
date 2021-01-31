@@ -1,9 +1,5 @@
-const NOTE_DESELECTED_COLOR = [62, 141, 152];
-const NOTE_SELECTED_COLOR = [255, 255, 255];
-const NOTE_BORDER_COLOR = [49, 111, 119];
-
 export default class Note {
-	constructor(x, y, note, size) {
+	constructor(x, y, note, size, noteTheme) {
 		this.x = x;
 		this.y = y;
 		this.note = note;
@@ -12,15 +8,19 @@ export default class Note {
 		this.active = false;
 		this.canPlay = true;
 		this.displayNotes = false;
+
+		this.noteTheme = noteTheme;
 	}
 
 	draw() {
 		textSize(12);
 
-		let col = this.active ? NOTE_SELECTED_COLOR : NOTE_DESELECTED_COLOR;
+		let col = this.active
+			? this.noteTheme.selected
+			: this.noteTheme.deselected;
 
 		strokeWeight(1);
-		stroke(NOTE_BORDER_COLOR);
+		stroke(this.noteTheme.border);
 		fill(col);
 		square(this.x, this.y, this.size);
 

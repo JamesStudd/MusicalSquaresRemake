@@ -28,8 +28,8 @@ export default class Synth {
 			},
 		});
 
-		this.minVolume = -60;
-		this.maxVolume = -10;
+		this.minVolume = -40;
+		this.maxVolume = 0;
 		this.mute = -100;
 	}
 

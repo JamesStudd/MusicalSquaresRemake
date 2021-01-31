@@ -2,7 +2,7 @@ export default class SynthSettings {
 	constructor(polySynth) {
 		const min = 0,
 			max = 100,
-			start = 60;
+			start = 75;
 
 		let label = createDiv("Volume");
 		label.class("sliderLabel");

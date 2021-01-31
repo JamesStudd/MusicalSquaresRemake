@@ -5,6 +5,7 @@ import SynthSettings from "./modules/settings.js";
 import { scales } from "./setup/scales.js";
 import { ParticleSystem } from "./modules/particle.js";
 import Checkbox from "./modules/checkbox.js";
+import Themes from "./settings/themes.js";
 
 const SIZE_SETTINGS = {
 	PC: {
@@ -19,12 +20,13 @@ const SIZE_SETTINGS = {
 	},
 };
 
-const BACKGROUND_COLOR = [18, 41, 44];
 const USING_MOBILE = mobileCheck();
 
 let chosenSettings = USING_MOBILE ? SIZE_SETTINGS.MOBILE : SIZE_SETTINGS.PC;
+let chosenTheme = Themes[0];
 
 const { GRID_SIZE, OFFSET, NOTE_SIZE } = chosenSettings;
+const { background: backgroundColor, settings: settingsColor } = chosenTheme;
 
 let allNotes = [];
 let playLine;
@@ -38,16 +40,26 @@ const synth = new Synth(
 	0.2,
 	USING_MOBILE ? -1 : 2,
 	USING_MOBILE ? 10 : 64,
-	USING_MOBILE ? -10 : -30
+	USING_MOBILE ? -10 : -10
 );
 
 let particleSystem;
-let displayLine = true,
-	displayParticles = true;
+let displayLine = false;
+let displayParticles = true;
 
 window.setup = function () {
 	let cnv = createCanvas(NOTE_SIZE * GRID_SIZE, NOTE_SIZE * GRID_SIZE);
 	cnv.parent("sketch-holder");
+
+	document.body.style.setProperty(
+		"background-color",
+		backgroundColor,
+		"important"
+	);
+
+	document
+		.getElementById("settings")
+		.style.setProperty("background-color", settingsColor);
 
 	frameRate(60);
 	textAlign(CENTER, CENTER);
@@ -85,7 +97,7 @@ window.setup = function () {
 		() => (displayParticles = !displayParticles)
 	);
 
-	new Checkbox("Show Line", true).box.changed(
+	new Checkbox("Show Line", false).box.changed(
 		() => (displayLine = !displayLine)
 	);
 
@@ -100,7 +112,7 @@ window.setup = function () {
 };
 
 window.draw = function () {
-	background(BACKGROUND_COLOR);
+	background(backgroundColor);
 	playLine.update(deltaTime);
 
 	if (playLine.x > width) {
@@ -122,7 +134,8 @@ window.draw = function () {
 			if (displayParticles) {
 				particleSystem.addParticle(
 					note.x + note.size / 2,
-					note.y + note.size / 2
+					note.y + note.size / 2,
+					chosenTheme.particle
 				);
 			}
 		}
@@ -135,6 +148,7 @@ window.draw = function () {
 window.mousePressed = function () {
 	if (mouseX === 0 && mouseY === 0) return;
 	let note = getSingleNoteFromMousePos();
+	let leftMouse = mouseButton === LEFT;
 	if (note) {
 		note.active = !note.active;
 		activatingNotes = note.active;
@@ -224,7 +238,8 @@ function setupGrid(initial = false) {
 						OFFSET + col * NOTE_SIZE,
 						OFFSET + height - NOTE_SIZE - row * NOTE_SIZE,
 						note,
-						NOTE_SIZE - OFFSET * 2
+						NOTE_SIZE - OFFSET * 2,
+						chosenTheme.note
 					)
 				);
 			} else {

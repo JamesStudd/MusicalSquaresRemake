@@ -3,7 +3,6 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  background-color: #12292c !important;
 }
 
 canvas {
@@ -16,36 +15,32 @@ canvas {
     text-align: center;
     height: auto;
     padding-top: 10%;
-
 }
 
 #settings {
     width: 60%;
-    max-width: 700px;
+    max-width: 500px;
     margin: auto;
-    padding: 10px;
     text-align: center;
-    border: 1px solid grey;
-    background-color: #285b62;
+    border: 1px solid #B5838D;
+    font-family: 'Oswald', sans-serif;
 }
 
 #settings h1,label,p {
     color: white;
-    padding-bottom: 0px;
+}
+
+#settings h1 {
+    font-weight: bold;
 }
 
 #sliders {
     width: 50%;
     margin: auto;
-    padding-bottom: 10px;
 }
 
 .sliderLabel {
     color: white;
-}
-
-.settingOption {
-    margin-bottom: 10px;
 }
 
 hr {
