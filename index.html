@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">  
 
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="sidepanel.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
     <script src="https://unpkg.com/tone@14.7.77" type="text/javascript"></script>
@@ -18,20 +19,27 @@
 
   <body>
     <script type="module" src="./sketch.js"></script>
+    <script src="./index.js"></script>
 
     <div id="content">
         <div id="sketch-holder"></div>
-        <hr>
-        <div id="settings">
-            <div class="pcOnly">
-                <h1 class="settingsText">How To</h1>
-                <p class="settingsText"> Click and drag to activate squares. <br> Press Spacebar to clear all squares. <br> Press T to change theme. </p>
-                <h1 class="settingsText"> Settings </h1>
-            </div>
-            <div id="sliders">
-
-            </div>
-        </div>
     </div>
+
+    <div id="sideMaster">
+        <div id="mySidepanel" class="sidepanel">
+            <!-- <a href="javascript:void(0)" class="closebtn" onclick="toggleNav()">&times;</a> -->
+                <div class="pcOnly">
+                    <h1 class="settingsText">How To</h1>
+                    <p class="settingsText"> Click and drag to activate squares. <br> Press Spacebar to clear all squares. <br> Press T to change theme. </p>
+                    <h1 class="settingsText"> Settings </h1>
+                </div>
+                <div id="sliders">
+
+                </div>
+        </div>
+        <button class="openbtn" id="toggleButton" onclick="toggleNav()">>></button>
+      </div>
+      
+
   </body>
 </html>

@@ -14,12 +14,11 @@ canvas {
     width: 100%;
     text-align: center;
     height: auto;
-    padding-top: 10%;
+    padding-top: 15%;
 }
 
 #settings {
-    width: 60%;
-    max-width: 500px;
+    width: 100%;
     margin: auto;
     text-align: center;
     font-family: 'Oswald', sans-serif;

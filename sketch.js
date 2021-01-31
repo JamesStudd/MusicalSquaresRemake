@@ -39,7 +39,7 @@ const synth = new Synth(
 	0.5,
 	0.2,
 	USING_MOBILE ? -1 : 2,
-	USING_MOBILE ? 10 : 64,
+	USING_MOBILE ? 10 : 128,
 	USING_MOBILE ? -10 : -10
 );
 
@@ -62,7 +62,7 @@ window.setup = function () {
 
 	// UI elements
 	let button = createButton("Clear");
-	button.parent("settings");
+	button.parent("mySidepanel");
 	button.class("mobileOnly");
 	button.mousePressed(clearNotes);
 
@@ -76,7 +76,7 @@ window.setup = function () {
 		}
 	}
 	scaleDropdown.changed(() => newScaleSelected(scaleDropdown.value()));
-	scaleDropdown.parent("settings");
+	scaleDropdown.parent("mySidepanel");
 	scaleDropdown.class("settingOption");
 
 	new Checkbox("Show Notes", false).box.changed(() =>
@@ -201,9 +201,13 @@ function changeTheme() {
 		"important"
 	);
 
-	let elem = document.getElementById("settings").style;
+	let elem = document.getElementById("mySidepanel").style;
 	elem.setProperty("background-color", settings.background);
-	elem.setProperty("border", `1px solid ${settings.border}`);
+	//elem.setProperty("border", `1px solid ${settings.border}`);
+
+	let buttonEle = document.getElementById("toggleButton").style;
+	buttonEle.setProperty("background-color", settings.background);
+	buttonEle.setProperty("border", `1px solid ${settings.border}`);
 
 	let texts = document.getElementsByClassName("settingsText");
 	for (const t of texts) {

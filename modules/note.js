@@ -19,8 +19,11 @@ export default class Note {
 			? this.noteTheme.selected
 			: this.noteTheme.deselected;
 
-		strokeWeight(1);
-		stroke(this.noteTheme.border);
+		noStroke();
+
+		fill(this.noteTheme.shadow);
+		square(this.x + 1, this.y - 3, this.size + 4);
+
 		fill(col);
 		square(this.x, this.y, this.size);
 
