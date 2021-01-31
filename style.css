@@ -23,6 +23,7 @@ canvas {
     margin: auto;
     text-align: center;
     font-family: 'Oswald', sans-serif;
+    font-size: 1.2em;
 }
 
 #settings h1 {
@@ -38,8 +39,19 @@ hr {
     width: 50%;
 }
 
+input[type="checkbox"] {
+    width: 20px;
+}
+
 .mobileOnly {
     display: none;
+}
+
+.settingsText {
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
 }
 
 @media only screen and (max-width: 1000px) {
