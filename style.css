@@ -22,12 +22,7 @@ canvas {
     max-width: 500px;
     margin: auto;
     text-align: center;
-    border: 1px solid #B5838D;
     font-family: 'Oswald', sans-serif;
-}
-
-#settings h1,label,p {
-    color: white;
 }
 
 #settings h1 {
@@ -37,10 +32,6 @@ canvas {
 #sliders {
     width: 50%;
     margin: auto;
-}
-
-.sliderLabel {
-    color: white;
 }
 
 hr {

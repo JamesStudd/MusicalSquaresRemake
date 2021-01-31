@@ -23,10 +23,10 @@ const SIZE_SETTINGS = {
 const USING_MOBILE = mobileCheck();
 
 let chosenSettings = USING_MOBILE ? SIZE_SETTINGS.MOBILE : SIZE_SETTINGS.PC;
-let chosenTheme = Themes[0];
+let themeIndex = 0;
+let chosenTheme;
 
 const { GRID_SIZE, OFFSET, NOTE_SIZE } = chosenSettings;
-const { background: backgroundColor, settings: settingsColor } = chosenTheme;
 
 let allNotes = [];
 let playLine;
@@ -50,16 +50,6 @@ let displayParticles = true;
 window.setup = function () {
 	let cnv = createCanvas(NOTE_SIZE * GRID_SIZE, NOTE_SIZE * GRID_SIZE);
 	cnv.parent("sketch-holder");
-
-	document.body.style.setProperty(
-		"background-color",
-		backgroundColor,
-		"important"
-	);
-
-	document
-		.getElementById("settings")
-		.style.setProperty("background-color", settingsColor);
 
 	frameRate(60);
 	textAlign(CENTER, CENTER);
@@ -101,18 +91,20 @@ window.setup = function () {
 		() => (displayLine = !displayLine)
 	);
 
+	if (!USING_MOBILE) new SynthSettings(synth);
+
+	changeTheme();
+
 	// Grid setup
 	setupGrid(true);
 	playLine = new Line(USING_MOBILE ? 11 : 3.5);
-
-	if (!USING_MOBILE) new SynthSettings(synth);
 
 	// Particles
 	particleSystem = new ParticleSystem(createVector(width / 2, 50));
 };
 
 window.draw = function () {
-	background(backgroundColor);
+	background(chosenTheme.background);
 	playLine.update(deltaTime);
 
 	if (playLine.x > width) {
@@ -148,7 +140,6 @@ window.draw = function () {
 window.mousePressed = function () {
 	if (mouseX === 0 && mouseY === 0) return;
 	let note = getSingleNoteFromMousePos();
-	let leftMouse = mouseButton === LEFT;
 	if (note) {
 		note.active = !note.active;
 		activatingNotes = note.active;
@@ -170,6 +161,11 @@ window.keyPressed = function () {
 	// Spacebar
 	if (keyCode === 32) {
 		clearNotes();
+	}
+	// 't'
+	if (keyCode === 84) {
+		themeIndex = themeIndex + 1 >= Themes.length ? 0 : themeIndex + 1;
+		changeTheme();
 	}
 };
 
@@ -193,6 +189,28 @@ function clearNotes() {
 	allNotes.forEach((note) => {
 		note.active = false;
 	});
+}
+
+function changeTheme() {
+	chosenTheme = Themes[themeIndex];
+	let { background, settings, text } = chosenTheme;
+
+	document.body.style.setProperty(
+		"background-color",
+		background,
+		"important"
+	);
+
+	let elem = document.getElementById("settings").style;
+	elem.setProperty("background-color", settings.background);
+	elem.setProperty("border", `1px solid ${settings.border}`);
+
+	let texts = document.getElementsByClassName("settingsText");
+	for (const t of texts) {
+		t.style.setProperty("color", text);
+	}
+
+	allNotes.forEach((note) => (note.noteTheme = chosenTheme.note));
 }
 
 function newScaleSelected(value) {

@@ -5,7 +5,7 @@ export default class SynthSettings {
 			start = 75;
 
 		let label = createDiv("Volume");
-		label.class("sliderLabel");
+		label.class("settingsText");
 		label.parent("sliders");
 
 		let slider = createSlider(min, max, start);
