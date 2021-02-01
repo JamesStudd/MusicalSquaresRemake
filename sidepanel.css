@@ -35,6 +35,10 @@
     .openbtn {
         top: 30%;
     }
+
+    #sideMaster {
+        margin-left: -300px;
+    }
 }
   
   /* The sidepanel links */
