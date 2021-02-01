@@ -7,7 +7,7 @@ let isClosed = false;
 
 const USING_MOBILE = mobileCheck();
 
-if (USING_MOBILE || window.innerWidth <= 800) {
+if (USING_MOBILE) {
 	document.getElementById("toggleButton").innerHTML = ">>";
 	isClosed = true;
 }
