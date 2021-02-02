@@ -48,7 +48,9 @@ export default class Note {
 		return dx * dx + dy * dy;
 	}
 
-	isLineOver(x) {
-		return x >= this.x && x <= this.x + this.size;
+	isLineOver(pos, dir) {
+		return dir.x !== 0
+			? pos.x >= this.x && pos.x <= this.x + this.size
+			: pos.y >= this.y && pos.y <= this.y + this.size;
 	}
 }

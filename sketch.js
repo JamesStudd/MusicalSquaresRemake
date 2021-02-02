@@ -41,8 +41,16 @@ const synth = new Synth(
 	USING_MOBILE ? -10 : -10
 );
 
+const lineDirections = [
+	[-1, 0],
+	[0, -1],
+	[1, 0],
+	[0, 1],
+];
+let lineDirectionIndex = 2;
+
 let particleSystem;
-let displayLine = false;
+let displayLine = true;
 let displayParticles = true;
 
 window.setup = function () {
@@ -80,7 +88,7 @@ window.setup = function () {
 		() => (displayParticles = !displayParticles)
 	);
 
-	new Checkbox("Show Line", false).box.changed(
+	new Checkbox("Show Line", true).box.changed(
 		() => (displayLine = !displayLine)
 	);
 
@@ -96,6 +104,7 @@ window.setup = function () {
 	// Grid setup
 	setupGrid(true);
 	playLine = new Line(USING_MOBILE ? 11 : 3.5);
+	changeLineDir();
 
 	// Particles
 	particleSystem = new ParticleSystem(createVector(width / 2, 50));
@@ -105,16 +114,18 @@ window.draw = function () {
 	background(chosenTheme.background);
 	playLine.update(deltaTime);
 
-	if (playLine.x > width) {
-		playLine.x = 0;
-		allNotes.forEach((note) => {
-			note.canPlay = true;
-		});
+	if (playLine.needsResetting()) {
+		playLine.reset();
+		resetNotes();
 	}
 
 	allNotes.forEach((note) => {
 		note.draw();
-		if (note.active && note.canPlay && note.isLineOver(playLine.x)) {
+		if (
+			note.active &&
+			note.canPlay &&
+			note.isLineOver(playLine.pos, playLine.dir)
+		) {
 			synth.play(
 				note,
 				USING_MOBILE ? "16n" : "8n",
@@ -165,6 +176,12 @@ window.keyPressed = function () {
 	if (keyCode === 84) {
 		themeIndex = themeIndex + 1 >= Themes.length ? 0 : themeIndex + 1;
 		changeTheme();
+	}
+
+	// Left, Up, Right, Down
+	if (keyCode === 37 || keyCode === 38 || keyCode === 39 || keyCode === 40) {
+		lineDirectionIndex = keyCode - 37;
+		changeLineDir();
 	}
 };
 
@@ -221,6 +238,16 @@ function getSingleNoteFromMousePos() {
 		}
 	}
 	return closestNote;
+}
+
+function changeLineDir() {
+	let d = lineDirections[lineDirectionIndex];
+	playLine.setNewDir(d[0], d[1]);
+	resetNotes();
+}
+
+function resetNotes() {
+	allNotes.forEach((note) => (note.canPlay = true));
 }
 
 function setupGrid(initial = false) {
