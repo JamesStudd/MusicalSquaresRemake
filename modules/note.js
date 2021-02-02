@@ -7,7 +7,7 @@ export default class Note {
 		this.size = size;
 		this.active = false;
 		this.canPlay = true;
-		this.displayNotes = false;
+		this.displayNotes = getCookie("displayNotes") ?? false;
 
 		this.noteTheme = noteTheme;
 	}

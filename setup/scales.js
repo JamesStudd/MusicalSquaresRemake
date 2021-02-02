@@ -9,11 +9,7 @@ export const scales = [
 	{ name: "Gb Pentatonic", notes: ["Gb3", "Ab3", "Bb3", "Db4", "Eb4"] },
 	{ name: "G Pentatonic", notes: ["G3", "A3", "B3", "D4", "E4"] },
 	{ name: "Ab Pentatonic", notes: ["Ab3", "Bb3", "C4", "Eb4", "F4"] },
-	{
-		name: "A Pentatonic",
-		notes: ["A3", "B3", "C#4", "E4", "F#4"],
-		default: true,
-	},
+	{ name: "A Pentatonic", notes: ["A3", "B3", "C#4", "E4", "F#4"] },
 	{ name: "Bb Pentatonic", notes: ["Bb3", "C4", "D4", "F4", "G4"] },
 	{ name: "B Pentatonic", notes: ["B3", "C#4", "D#4", "F#4", "G#4"] },
 ];

@@ -21,14 +21,14 @@ const SIZE_SETTINGS = {
 };
 
 let chosenSettings = USING_MOBILE ? SIZE_SETTINGS.MOBILE : SIZE_SETTINGS.PC;
-let themeIndex = 0;
+let themeIndex = getCookie(COOKIES.THEME) ?? 0;
 let chosenTheme;
 
 const { GRID_SIZE, OFFSET, NOTE_SIZE } = chosenSettings;
 
 let allNotes = [];
 let playLine;
-let scaleSelection = 0;
+let scaleSelection = getCookie(COOKIES.SCALE) ?? DEFAULTS.SCALE_INDEX;
 let activatingNotes = false;
 
 const synth = new Synth(
@@ -50,8 +50,9 @@ const lineDirections = [
 let lineDirectionIndex = 2;
 
 let particleSystem;
-let displayLine = true;
-let displayParticles = true;
+let displayLine = getCookie(COOKIES.SHOW_LINE) ?? DEFAULTS.SHOW_LINE;
+let displayParticles =
+	getCookie(COOKIES.SHOW_PARTICLES) ?? DEFAULTS.SHOW_PARTICLES;
 
 window.setup = function () {
 	let cnv = createCanvas(NOTE_SIZE * GRID_SIZE, NOTE_SIZE * GRID_SIZE);
@@ -71,26 +72,47 @@ window.setup = function () {
 	for (let i = 0; i < scales.length; i++) {
 		const scale = scales[i];
 		scaleDropdown.option(scale.name);
-		if (scale.default) {
+		if (i === scaleSelection) {
 			scaleDropdown.selected(scale.name);
-			scaleSelection = i;
 		}
 	}
-	scaleDropdown.changed(() => newScaleSelected(scaleDropdown.value()));
+	scaleDropdown.changed(() => {
+		newScaleSelected(scaleDropdown.value());
+		for (let i = 0; i < scales.length; i++) {
+			if (scales[i].name === scaleDropdown.value()) {
+				setCookie(COOKIES.SCALE, i, 7);
+				return;
+			}
+		}
+	});
 	scaleDropdown.parent("mySidepanel");
 	scaleDropdown.class("settingOption");
 
-	new Checkbox("Show Notes", false).box.changed(() =>
-		allNotes.forEach((note) => note.toggleDisplayNotes())
-	);
+	let showNote = getCookie("displayNotes") ?? false;
+	let showNoteCheckbox = new Checkbox("Show Notes", showNote);
+	showNoteCheckbox.box.changed(() => {
+		allNotes.forEach((note) => note.toggleDisplayNotes());
+		setCookie("displayNotes", showNoteCheckbox.box.checked(), 7);
+	});
 
-	new Checkbox("Show Particles", true).box.changed(
-		() => (displayParticles = !displayParticles)
+	let showParticlesCheckbox = new Checkbox(
+		"Show Particles",
+		displayParticles
 	);
+	showParticlesCheckbox.box.changed(() => {
+		displayParticles = !displayParticles;
+		setCookie(
+			COOKIES.SHOW_PARTICLES,
+			showParticlesCheckbox.box.checked(),
+			7
+		);
+	});
 
-	new Checkbox("Show Line", true).box.changed(
-		() => (displayLine = !displayLine)
-	);
+	let showLineCheckbox = new Checkbox("Show Line", displayLine);
+	showLineCheckbox.box.changed(() => {
+		displayLine = !displayLine;
+		setCookie(COOKIES.SHOW_LINE, showLineCheckbox.box.checked(), 7);
+	});
 
 	let button = createButton("Clear");
 	button.parent("mySidepanel");
@@ -215,6 +237,7 @@ function changeTheme() {
 	}
 
 	allNotes.forEach((note) => (note.noteTheme = chosenTheme.note));
+	setCookie(COOKIES.THEME, themeIndex, 7);
 }
 
 function newScaleSelected(value) {
