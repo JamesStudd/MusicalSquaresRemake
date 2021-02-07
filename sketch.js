@@ -21,25 +21,30 @@ const SIZE_SETTINGS = {
 };
 
 let chosenSettings = USING_MOBILE ? SIZE_SETTINGS.MOBILE : SIZE_SETTINGS.PC;
-let themeIndex = getPersistentData(COOKIES.THEME) ?? 0;
+let themeIndex = getPersistentData(PERSISTENT_DATA.THEME) ?? 0;
 let chosenTheme;
 
 const { GRID_SIZE, OFFSET, NOTE_SIZE } = chosenSettings;
 
 let allNotes = [];
 let playLine;
-let scaleSelection = getPersistentData(COOKIES.SCALE) ?? DEFAULTS.SCALE_INDEX;
+let scaleSelection =
+	getPersistentData(PERSISTENT_DATA.SCALE) ?? DEFAULTS.SCALE_INDEX;
 let activatingNotes = false;
+let waveTypeSelection =
+	getPersistentData(PERSISTENT_DATA.WAVE_TYPE) ?? DEFAULTS.WAVE_TYPE;
 
 const synth = new Synth(
-	0.05,
-	0.1,
-	0.5,
-	0.2,
+	0.005, // a
+	0.1, // d
+	0.3, // s
+	USING_MOBILE ? 0.4 : 1, // r
 	USING_MOBILE ? -1 : 2,
-	USING_MOBILE ? 10 : 128,
+	USING_MOBILE ? 8 : 128,
 	USING_MOBILE ? -10 : -10
 );
+
+synth.setWaveType(waveTypeSelection);
 
 const lineDirections = [
 	[-1, 0],
@@ -50,9 +55,11 @@ const lineDirections = [
 let lineDirectionIndex = 2;
 
 let particleSystem;
-let displayLine = getPersistentData(COOKIES.SHOW_LINE) ?? DEFAULTS.SHOW_LINE;
+let displayLine =
+	getPersistentData(PERSISTENT_DATA.SHOW_LINE) ?? DEFAULTS.SHOW_LINE;
 let displayParticles =
-	getPersistentData(COOKIES.SHOW_PARTICLES) ?? DEFAULTS.SHOW_PARTICLES;
+	getPersistentData(PERSISTENT_DATA.SHOW_PARTICLES) ??
+	DEFAULTS.SHOW_PARTICLES;
 
 window.setup = function () {
 	let cnv = createCanvas(NOTE_SIZE * GRID_SIZE, NOTE_SIZE * GRID_SIZE);
@@ -80,7 +87,7 @@ window.setup = function () {
 		newScaleSelected(scaleDropdown.value());
 		for (let i = 0; i < scales.length; i++) {
 			if (scales[i].name === scaleDropdown.value()) {
-				setPersistentData(COOKIES.SCALE, i, 7);
+				setPersistentData(PERSISTENT_DATA.SCALE, i);
 				return;
 			}
 		}
@@ -88,11 +95,27 @@ window.setup = function () {
 	scaleDropdown.parent("mySidepanel");
 	scaleDropdown.class("settingOption");
 
+	let waveDropdown = createSelect();
+	waveDropdown.option("sine");
+	waveDropdown.option("triangle");
+	waveDropdown.option("sawtooth");
+	waveDropdown.option("square");
+
+	waveDropdown.selected(waveTypeSelection);
+
+	waveDropdown.changed(() => {
+		setPersistentData(PERSISTENT_DATA.WAVE_TYPE, waveDropdown.value());
+		synth.setWaveType(waveDropdown.value());
+	});
+
+	waveDropdown.parent("mySidepanel");
+	waveDropdown.class("settingOption");
+
 	let showNote = getPersistentData("displayNotes") ?? false;
 	let showNoteCheckbox = new Checkbox("Show Notes", showNote);
 	showNoteCheckbox.box.changed(() => {
 		allNotes.forEach((note) => note.toggleDisplayNotes());
-		setPersistentData("displayNotes", showNoteCheckbox.box.checked(), 7);
+		setPersistentData("displayNotes", showNoteCheckbox.box.checked());
 	});
 
 	let showParticlesCheckbox = new Checkbox(
@@ -102,7 +125,7 @@ window.setup = function () {
 	showParticlesCheckbox.box.changed(() => {
 		displayParticles = !displayParticles;
 		setPersistentData(
-			COOKIES.SHOW_PARTICLES,
+			PERSISTENT_DATA.SHOW_PARTICLES,
 			showParticlesCheckbox.box.checked(),
 			7
 		);
@@ -111,7 +134,10 @@ window.setup = function () {
 	let showLineCheckbox = new Checkbox("Show Line", displayLine);
 	showLineCheckbox.box.changed(() => {
 		displayLine = !displayLine;
-		setPersistentData(COOKIES.SHOW_LINE, showLineCheckbox.box.checked(), 7);
+		setPersistentData(
+			PERSISTENT_DATA.SHOW_LINE,
+			showLineCheckbox.box.checked()
+		);
 	});
 
 	let button = createButton("Clear");
@@ -237,7 +263,7 @@ function changeTheme() {
 	}
 
 	allNotes.forEach((note) => (note.noteTheme = chosenTheme.note));
-	setPersistentData(COOKIES.THEME, themeIndex, 7);
+	setPersistentData(PERSISTENT_DATA.THEME, themeIndex, 7);
 }
 
 function newScaleSelected(value) {

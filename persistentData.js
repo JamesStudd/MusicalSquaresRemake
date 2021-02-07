@@ -5,7 +5,9 @@ function setPersistentData(cname, cvalue) {
 function getPersistentData(cname) {
 	let data = localStorage.getItem(cname);
 	if (data) {
-		data = JSON.parse(data);
+		try {
+			data = JSON.parse(data);
+		} catch {}
 	}
 	return data;
 }

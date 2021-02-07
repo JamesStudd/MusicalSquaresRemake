@@ -8,25 +8,28 @@ export default class Synth {
 				  }).toDestination();
 
 		this.synth = new Tone.PolySynth({
+			volume: startVolume,
+			maxPolyphony: maxVoices,
+		}).toDestination();
+
+		this.synth.set({
 			envelope: {
 				attack: a,
 				decay: d,
 				sustain: s,
 				release: r,
+				attackCurve: "linear",
+				decayCurve: "exponential",
+				releaseCurve: "exponential",
 			},
-			volume: startVolume,
-			maxPolyphony: maxVoices,
-		}).toDestination();
-
-		if (rev) {
-			this.synth.connect(rev);
-		}
-
-		this.synth.set({
 			oscillator: {
 				type: "sine",
 			},
 		});
+
+		if (rev) {
+			this.synth.connect(rev);
+		}
 
 		this.minVolume = -40;
 		this.maxVolume = 0;
@@ -41,5 +44,9 @@ export default class Synth {
 		let newVolume = map(volume, min, max, this.minVolume, this.maxVolume);
 		if (newVolume === this.minVolume) newVolume = this.mute;
 		this.synth.volume.value = newVolume;
+	}
+
+	setWaveType(newWaveType) {
+		this.synth.set({ oscillator: { type: newWaveType } });
 	}
 }
