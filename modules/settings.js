@@ -1,6 +1,6 @@
 export default class SynthSettings {
 	constructor(polySynth) {
-		let volume = getCookie(COOKIES.VOLUME) ?? DEFAULTS.VOLUME;
+		let volume = getPersistentData(COOKIES.VOLUME) ?? DEFAULTS.VOLUME;
 		const min = 0,
 			max = 100,
 			start = volume;
@@ -14,7 +14,7 @@ export default class SynthSettings {
 
 		slider.input(() => {
 			polySynth.setVolumeFromMap(slider.value(), min, max);
-			setCookie(COOKIES.VOLUME, slider.value(), 7);
+			setPersistentData(COOKIES.VOLUME, slider.value(), 7);
 		});
 
 		polySynth.setVolumeFromMap(volume, min, max);
